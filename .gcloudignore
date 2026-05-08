@@ -11,11 +11,8 @@ pnpm-debug.log*
 .pnp
 .pnp.js
 
-# --- Source code (we deploy the built `dist/` only) ---
-src
-public
-index.html
-vite.config.js
+# --- Build artifacts (Docker rebuilds these fresh in-container) ---
+dist
 
 # --- Editor / OS ---
 .git
@@ -26,18 +23,17 @@ vite.config.js
 .DS_Store
 Thumbs.db
 
-# --- Env files (never push secrets) ---
-.env
-.env.local
-.env.*.local
-
-# --- Firebase artifacts (when using Firebase path) ---
-firebase.json
-.firebaserc
+# --- Firebase local cache ---
 .firebase
 
-# --- Misc ---
+# --- Tooling / docs not needed in build context ---
+.claude
+.junie
+memory
 README.md
 DEPLOY.md
 *.log
 *.tmp
+
+# Note: .env.local is intentionally NOT excluded — Vite reads it during the
+# in-container build to inline the VITE_FIREBASE_* config into the bundle.
