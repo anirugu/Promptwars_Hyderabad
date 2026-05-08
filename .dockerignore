@@ -1,0 +1,19 @@
+node_modules
+dist
+.git
+.gitignore
+.firebase
+.vscode
+.idea
+.claude
+memory
+*.md
+LICENSE*
+firebase.json
+firestore.rules
+firestore.indexes.json
+.firebaserc
+app.yaml
+Dockerfile
+.dockerignore
+# Note: .env.local IS intentionally NOT excluded — Vite reads it during build.

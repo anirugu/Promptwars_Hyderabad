@@ -11,7 +11,8 @@
     "predeploy": "npm run build",
     "deploy:firebase": "npm run build && npx --yes firebase-tools@latest deploy --only hosting",
     "deploy:gae": "npm run build && gcloud app deploy --quiet",
-    "deploy:gcs": "npm run build && gcloud storage cp -r dist/* gs://%npm_config_bucket%/ --cache-control=\"public, max-age=3600\""
+    "deploy:gcs": "npm run build && gcloud storage cp -r dist/* gs://%npm_config_bucket%/ --cache-control=\"public, max-age=3600\"",
+    "deploy:cloudrun": "gcloud run deploy wanderforge --source . --region asia-south1 --allow-unauthenticated --project wanderforge --port 8080"
   },
   "dependencies": {
     "firebase": "^12.13.0",
