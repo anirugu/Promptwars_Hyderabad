@@ -9,7 +9,8 @@
       "PowerShell(gcloud --version 2>&1 | Select-Object -First 3; Write-Output \"---\"; gcloud auth list 2>&1 | Select-Object -First 10; Write-Output \"---\"; gcloud config get-value project 2>&1)",
       "PowerShell(npm *)",
       "Bash(npx *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(npm install *)"
     ]
   }
 }

@@ -56,11 +56,16 @@ export default function TripPlanner() {
 
   const dayKeys = Array.from({ length: draft.days }, (_, i) => i + 1);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!destination) return;
-    const saved = saveDraftAsTrip();
-    setConfirmation(`Saved “${saved.name}” to My Trips ✓`);
-    setTimeout(() => setConfirmation(null), 2400);
+    try {
+      const saved = await saveDraftAsTrip();
+      setConfirmation(`Saved “${saved.name}” to My Trips ✓`);
+      setTimeout(() => setConfirmation(null), 2400);
+    } catch (err) {
+      setConfirmation('Could not save — check your connection and try again.');
+      setTimeout(() => setConfirmation(null), 3200);
+    }
   };
 
   const handleNew = () => {

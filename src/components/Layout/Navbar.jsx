@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 
 const links = [
   { to: '/explore', label: 'Explore' },
@@ -10,6 +11,30 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const { user, authReady, signIn, signOut } = useAuth();
+  const [busy, setBusy] = useState(false);
+
+  const handleSignIn = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await signIn();
+    } catch (err) {
+      console.error('Sign-in failed', err);
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const handleSignOut = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      await signOut();
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <header className="navbar">
@@ -47,6 +72,42 @@ export default function Navbar() {
           <Link to="/planner" className="btn btn--accent btn--small navbar__cta">
             Start planning
           </Link>
+
+          {authReady && !user && (
+            <button
+              type="button"
+              className="btn btn--ghost btn--small navbar__auth"
+              onClick={handleSignIn}
+              disabled={busy}
+            >
+              {busy ? 'Signing in…' : 'Sign in'}
+            </button>
+          )}
+
+          {authReady && user && (
+            <div className="navbar__user">
+              {user.photoURL ? (
+                <img
+                  src={user.photoURL}
+                  alt=""
+                  className="navbar__avatar"
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <span className="navbar__avatar navbar__avatar--fallback" aria-hidden>
+                  {(user.displayName || user.email || '?').charAt(0).toUpperCase()}
+                </span>
+              )}
+              <button
+                type="button"
+                className="btn btn--ghost btn--small"
+                onClick={handleSignOut}
+                disabled={busy}
+              >
+                Sign out
+              </button>
+            </div>
+          )}
         </nav>
       </div>
       <NavbarStyles />
@@ -108,6 +169,30 @@ function NavbarStyles() {
       .navbar__link:hover { color: var(--slate-900); background: var(--slate-100); }
       .navbar__link.is-active { color: var(--teal-700); background: var(--teal-100); }
       .navbar__cta { margin-left: 8px; }
+
+      .navbar__auth { margin-left: 4px; }
+      .navbar__user {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-left: 8px;
+      }
+      .navbar__avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid var(--border);
+        background: var(--slate-100);
+      }
+      .navbar__avatar--fallback {
+        display: inline-grid;
+        place-items: center;
+        font-weight: 700;
+        color: var(--slate-700);
+        font-size: 0.85rem;
+      }
+
       .navbar__toggle {
         display: none;
         background: none;
@@ -146,6 +231,7 @@ function NavbarStyles() {
           pointer-events: all;
         }
         .navbar__cta { margin: 8px 0 0; align-self: flex-start; }
+        .navbar__user { margin: 8px 0 0; }
       }
     `}</style>
   );
