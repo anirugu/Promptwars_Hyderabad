@@ -1,0 +1,35 @@
+# ===========================================================================
+# Google App Engine Standard config for WanderForge (static-only React SPA).
+#
+# Uses the python311 runtime with `static_files` handlers, so NO Python code
+# is executed: App Engine just serves the built `dist/` folder as static
+# assets and falls back to /index.html so client-side react-router-dom
+# routes work on direct navigation/refresh.
+#
+# Deploy with:
+#   npm run build
+#   gcloud app deploy --quiet
+# ===========================================================================
+
+runtime: python311
+
+handlers:
+  # Long-lived, fingerprinted Vite assets (immutable cache).
+  - url: /assets
+    static_dir: dist/assets
+    secure: always
+    expiration: "365d"
+
+  # Other top-level static files (favicon, manifest, robots, etc.).
+  - url: /(.+\.(?:js|css|map|json|txt|svg|png|jpg|jpeg|gif|ico|webp|woff|woff2|ttf|otf))$
+    static_files: dist/\1
+    upload: dist/(.+\.(js|css|map|json|txt|svg|png|jpg|jpeg|gif|ico|webp|woff|woff2|ttf|otf))$
+    secure: always
+    expiration: "30d"
+
+  # SPA fallback: every other path returns index.html so react-router can
+  # take over on the client.
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
+    secure: always

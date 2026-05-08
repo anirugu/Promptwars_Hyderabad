@@ -1,0 +1,43 @@
+# This file controls which local files are skipped when running
+# `gcloud app deploy` / `gcloud run deploy --source`.
+# Anything matched here is NOT uploaded to Google Cloud.
+
+# --- Node ---
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnp
+.pnp.js
+
+# --- Source code (we deploy the built `dist/` only) ---
+src
+public
+index.html
+vite.config.js
+
+# --- Editor / OS ---
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+.DS_Store
+Thumbs.db
+
+# --- Env files (never push secrets) ---
+.env
+.env.local
+.env.*.local
+
+# --- Firebase artifacts (when using Firebase path) ---
+firebase.json
+.firebaserc
+.firebase
+
+# --- Misc ---
+README.md
+DEPLOY.md
+*.log
+*.tmp
