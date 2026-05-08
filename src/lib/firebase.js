@@ -1,12 +1,9 @@
 // ---------------------------------------------------------------------------
 // Firebase init for WanderForge.
 //
-// 1. In Firebase Console -> Project settings -> "Your apps" -> Web,
-//    register a web app (or open the existing one) and copy the
-//    `firebaseConfig` object.
-// 2. Paste your values into firebaseConfig below (these values are public —
-//    they identify the project, security comes from Firestore rules).
-// 3. Make sure Firestore + Google Auth are enabled in the console.
+// Config is read from Vite env vars in `.env.local` (see `.env.example`).
+// Get these values from Firebase Console -> Project settings -> Your apps -> Web.
+// Make sure Firestore + Google Auth are enabled in the console.
 // ---------------------------------------------------------------------------
 
 import { initializeApp } from 'firebase/app';
@@ -20,13 +17,19 @@ import {
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
-  apiKey: 'PASTE_API_KEY_HERE',
-  authDomain: 'wanderforge.firebaseapp.com',
-  projectId: 'wanderforge',
-  storageBucket: 'wanderforge.appspot.com',
-  messagingSenderId: 'PASTE_SENDER_ID_HERE',
-  appId: 'PASTE_APP_ID_HERE'
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
+
+if (!firebaseConfig.apiKey) {
+  console.warn(
+    '[firebase] Missing VITE_FIREBASE_* env vars. Copy .env.example to .env.local and fill in values from Firebase Console.'
+  );
+}
 
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
